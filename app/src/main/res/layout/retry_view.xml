@@ -1,0 +1,101 @@
+<LinearLayout android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_marginBottom="12dp"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:layout_marginTop="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="12dp"
+                android:orientation="vertical">
+
+                <ProgressBar
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="6dp"
+                    android:id="@+id/progressBar"
+                    android:gravity="center"
+                    android:fontFamily="sans-serif-light"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp" />
+
+                     <LinearLayout
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:orientation="vertical"
+                        android:id="@+id/failure_view">
+
+                    <ImageView
+                        android:layout_height="80dp"
+                        android:layout_width="80dp"
+                        android:src="@drawable/ic_cloud_off"
+                        android:id="@+id/error_icon" />
+
+
+                    <TextView
+                        android:textSize="20sp"
+                        android:id="@+id/failed_text"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/error_bold"
+                        android:fontFamily="sans-serif-light"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Oops" />
+                </LinearLayout>
+
+
+                <TextView
+                    android:textSize="20sp"
+                    android:id="@+id/message"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:textColor="@color/error_bold"
+                    android:fontFamily="sans-serif"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Could not connect" />
+
+                <TextView
+                    android:textSize="20sp"
+                    android:id="@+id/retryLabel"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:textColor="@color/error"
+                    android:fontFamily="sans-serif"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="RETRY" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

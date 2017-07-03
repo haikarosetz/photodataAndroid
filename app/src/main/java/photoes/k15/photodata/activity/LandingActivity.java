@@ -2,14 +2,11 @@ package photoes.k15.photodata.activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,14 +16,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.gms.location.LocationListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import photoes.k15.photodata.R;
 import photoes.k15.photodata.adapter.UploadedDataAdapter;
 import photoes.k15.photodata.pojo.EventDetailItem;
+import photoes.k15.photodata.pojo.LatLongObject;
 import photoes.k15.photodata.tools.GPSTracker;
+import photoes.k15.photodata.tools.TransferableContent;
 
 public class LandingActivity extends AppCompatActivity{
 
@@ -34,6 +32,9 @@ public class LandingActivity extends AppCompatActivity{
     private LinearLayoutManager layoutManager;
     private UploadedDataAdapter adapter;
     private List<EventDetailItem> list;
+
+    private double latitude ;
+    private double longitude ;
 
     GPSTracker gps;
 
@@ -61,6 +62,7 @@ public class LandingActivity extends AppCompatActivity{
 
         int PERMISSION_ALL = 1;
         String[] PERMISSIONS = {
+                Manifest.permission.CAMERA,
                 Manifest.permission.ACCESS_NETWORK_STATE,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.MEDIA_CONTENT_CONTROL,
@@ -80,8 +82,8 @@ public class LandingActivity extends AppCompatActivity{
                 gps = new GPSTracker(LandingActivity.this);
                 // check if GPS enabled
                 if(gps.canGetLocation()){
-                    double latitude = gps.getLatitude();
-                    double longitude = gps.getLongitude();
+                    latitude = gps.getLatitude();
+                    longitude = gps.getLongitude();
                     // \n is for new line
                     Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
                 }else{
@@ -90,6 +92,13 @@ public class LandingActivity extends AppCompatActivity{
                     // Ask user to enable GPS/network in settings
                     gps.showSettingsAlert();
                 }
+
+                Intent intent=new Intent(getBaseContext(),EventUploadActivity.class);
+                LatLongObject latLongObject=new LatLongObject();
+                latLongObject.setLatitude(latitude);
+                latLongObject.setLongitude(longitude);
+                intent.putExtra(TransferableContent.TRANSFERLATLONG,TransferableContent.toJsonObject(latLongObject));
+                startActivity(intent);
             }
         });
 

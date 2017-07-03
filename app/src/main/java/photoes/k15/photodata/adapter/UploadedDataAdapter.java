@@ -1,6 +1,7 @@
 package photoes.k15.photodata.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,10 +10,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 import photoes.k15.photodata.R;
+import photoes.k15.photodata.activity.EventDetailActivity;
 import photoes.k15.photodata.pojo.EventDetailItem;
+import photoes.k15.photodata.tools.TransferableContent;
 
 /**
  * Created by root on 6/2/17.
@@ -53,6 +58,7 @@ public class UploadedDataAdapter extends RecyclerView.Adapter<UploadedDataAdapte
         private TextView count;
         private ImageView image;
         private TextView preview;
+        private EventDetailItem item;
 
 
         public UploadViewHolder(View view){
@@ -65,16 +71,22 @@ public class UploadedDataAdapter extends RecyclerView.Adapter<UploadedDataAdapte
 
         }
         public void setData(EventDetailItem item){
+            this.item=item;
             this.uploadedItemPojo=item;
             this.date.setText(item.getDate().toUpperCase());
             this.count.setText(Integer.toString(item.getResources().size())+"  PHOTOS");
-            //this.image.setImageResource(item.getResources().get(0));
+            Glide.with(context).load(item.getResources().get(0))
+                    .placeholder(R.drawable.demo)
+                    .into(image);
             this.preview.setText(item.getDescription());
         }
 
         @Override
         public void onClick(View v) {
-
+            Intent intent=new Intent(context, EventDetailActivity.class);
+            intent.putExtra(TransferableContent.TRANSFEREVENTDETAIL,TransferableContent.toJsonObject(item));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
         }
     }
 }

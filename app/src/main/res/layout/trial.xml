@@ -18,15 +18,18 @@
             android:layout_alignParentEnd="true"
             />
 
-        <TextView
+        <ImageView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/imageView"
-            android:layout_centerHorizontal="true"
             android:textSize="24sp"
             android:textColor="@color/textLightPrimary"
-            android:layout_marginBottom="88dp"
-            android:text="@string/app_name" />
+            android:src="@drawable/ic_delete_forever"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="11dp"
+            android:layout_marginEnd="11dp"
+            android:layout_marginTop="12dp" />
     </RelativeLayout>
 </LinearLayout>
