@@ -18,7 +18,10 @@ public class PhotoViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_view);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Photo Explorer");
+
 
         ImageView promo_image = (ImageView) findViewById(R.id.imageView2);
         Context context = getBaseContext();

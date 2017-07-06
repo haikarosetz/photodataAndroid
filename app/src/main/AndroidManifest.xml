@@ -36,7 +36,9 @@
             android:name=".activity.LandingActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.EventDetailActivity" />
-        <activity android:name=".activity.PhotoViewActivity" />
+        <activity android:name=".activity.PhotoViewActivity"
+            android:theme="@style/AppTheme.Galery"
+            />
         <activity android:name=".activity.EventUploadActivity"></activity>
     </application>
 

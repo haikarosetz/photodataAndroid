@@ -4,6 +4,7 @@
 
     <item
         android:title="UPLOAD"
+        android:id="@+id/upload"
         app:showAsAction="always"/>
 
 </menu>

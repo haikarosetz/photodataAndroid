@@ -1,16 +1,19 @@
 package photoes.k15.photodata.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sangcomz.fishbun.FishBun;
@@ -19,10 +22,6 @@ import com.sangcomz.fishbun.define.Define;
 import net.gotev.uploadservice.MultipartUploadRequest;
 import net.gotev.uploadservice.UploadNotificationConfig;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +42,6 @@ public class EventUploadActivity extends AppCompatActivity {
     private ResourceItemAdapter adapter;
     private LatLongObject latLongObject;
     private ArrayList<Uri> paths=new ArrayList<>();
-
     private EditText description;
 
     @Override
@@ -56,20 +54,20 @@ public class EventUploadActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FishBun.with(EventUploadActivity.this)
-                .setMaxCount(5)
+                .setMaxCount(30)
                 .setMinCount(1)
                 .setPickerSpanCount(6)
-                .setActionBarColor(Color.parseColor("#37474F"), Color.parseColor("#263238"), false)
-                .setActionBarTitleColor(Color.parseColor("#ffffff"))
+                .setActionBarColor(getResources().getColor(R.color.colorPrimary),getResources().getColor(R.color.colorPrimaryDark),false)
+                .setActionBarTitleColor(getResources().getColor(R.color.textLightPrimary))
                 .setArrayPaths(paths)
-                .setAlbumSpanCount(2, 4)
+                .setAlbumSpanCount(1, 4)
                 .setButtonInAlbumActivity(false)
                 .setCamera(true)
                 .setReachLimitAutomaticClose(false)
                 .setHomeAsUpIndicatorDrawable(ContextCompat.getDrawable(getBaseContext(),R.drawable.ic_close))
                 .setOkButtonDrawable(ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_action_tick))
                 .setAllViewTitle("All images")
-                .setActionBarTitle("Select images ")
+                .setActionBarTitle("Select photos ")
                 .textOnImagesSelectionLimitReached("Limit Reached!")
                 .textOnNothingSelected("Nothing Selected")
                 .startAlbum();
@@ -92,11 +90,13 @@ public class EventUploadActivity extends AppCompatActivity {
             case Define.ALBUM_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     paths = data.getParcelableArrayListExtra(Define.INTENT_PATH);
-                    Toast.makeText(getBaseContext(),Integer.toString(paths.size()),Toast.LENGTH_SHORT).show();
+                    if(paths.size()<1){
+                        finish();
+                    }
                     for(Uri path:paths){
                         ResourceItem item=new ResourceItem();
                         try {
-                            item.setUrl(PathUtil.getPath(getBaseContext(),path));
+                            item.setPath(PathUtil.getPath(getBaseContext(),path));
                         } catch (URISyntaxException e) {
                             e.printStackTrace();
                         }
@@ -110,6 +110,8 @@ public class EventUploadActivity extends AppCompatActivity {
                     recyclerView.setLayoutManager(layoutManager);
                     recyclerView.setAdapter(adapter);
                     break;
+                }else{
+                    finish();
                 }
         }
     }
@@ -117,38 +119,54 @@ public class EventUploadActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id=item.getItemId();
-        if(id==R.menu.upload_menu){
-            Toast.makeText(getBaseContext(),"hey buddy",Toast.LENGTH_LONG).show();
+        if(id==R.id.upload){
+            uploadMultipart();
         }
 
         return true;
     }
 
-    public void upload(){
-        String uploadId = UUID.randomUUID().toString();
+    public void uploadMultipart() {
 
-        UploadNotificationConfig uploadNotificationConfig=new UploadNotificationConfig();
-        uploadNotificationConfig.setTitle("uploading image data");
-        uploadNotificationConfig.setCompletedIconColor(android.R.color.holo_red_dark);
-        uploadNotificationConfig.setCompletedMessage("The upload process completed");
-        //Creating a multi part request
         try {
+            String uploadId = UUID.randomUUID().toString();
 
-            MultipartUploadRequest uploadRequest=new MultipartUploadRequest(this, uploadId, CommonInformation.UPLOAD_URL)
-                    .addParameter("user_name","")
-                    .setNotificationConfig(uploadNotificationConfig)
-                    .setMaxRetries(2);
-
-            for(Uri uri:paths){
-                uploadRequest.addFileToUpload(uri.getPath(), "data[]");
+            UploadNotificationConfig uploadNotificationConfig=new UploadNotificationConfig();
+            uploadNotificationConfig.setTitle("Uploading");
+            uploadNotificationConfig.setCompletedIconColor(android.R.color.holo_red_dark);
+            uploadNotificationConfig.setCompletedMessage("Uploading process completed");
+            //Creating a multi part request
+            MultipartUploadRequest request=new MultipartUploadRequest(this, uploadId,CommonInformation.UPLOAD_URL);
+            for(int i=0;i<resourceItems.size();i++){
+                        request.addFileToUpload(resourceItems.get(i).getPath(),"PHOTO[]");
             }
-            uploadRequest.startUpload();
+             request.addParameter("DESCRIPTION",description.getText().toString().trim())
+            .addParameter("LATITUDE",Double.toString(latLongObject.getLatitude()))
+            .addParameter("LONGITUDE",Double.toString(latLongObject.getLongitude()))
+                     .addParameter("USER_ID",Integer.toString(1))
+                     .addParameter("DATE","SOME DATE")
+            .setNotificationConfig(uploadNotificationConfig)
+            .setMaxRetries(2);
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+            request.startUpload();
+
+            LayoutInflater inflater=getLayoutInflater();
+            View customToastroot =inflater.inflate(R.layout.haikarose_toast_view, null);
+            TextView textView=(TextView)customToastroot.findViewById(R.id.toast_message);
+            textView.setText("You will be notified once upload complete!");
+            Toast customtoast=new Toast(getBaseContext());
+            customtoast.setView(customToastroot);
+            customtoast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM,0, 12);
+            customtoast.setDuration(Toast.LENGTH_LONG);
+            customtoast.show();
+
+            finish();
+
+        } catch (Exception exc) {
+            Toast.makeText(this, exc.getMessage(), Toast.LENGTH_SHORT).show();
         }
+
+
     }
 
 

@@ -3,13 +3,7 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
+  <LinearLayout
             android:gravity="center"
             android:layout_gravity="center"
             android:layout_marginBottom="12dp"
@@ -92,10 +86,7 @@
 
 
             </LinearLayout>
-
-
         </LinearLayout>
 
-    </ScrollView>
 
 </LinearLayout>

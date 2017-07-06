@@ -25,10 +25,10 @@ import photoes.k15.photodata.tools.TransferableContent;
 
 public class UploadedDataAdapter extends RecyclerView.Adapter<UploadedDataAdapter.UploadViewHolder> {
 
-    private List<EventDetailItem> uploadedItemPojoList;
+    private List<Object> uploadedItemPojoList;
     private Context context;
 
-    public UploadedDataAdapter(Context context, List<EventDetailItem> itemPojos){
+    public UploadedDataAdapter(Context context, List<Object> itemPojos){
         this.context=context;
         this.uploadedItemPojoList=itemPojos;
     }
@@ -42,7 +42,7 @@ public class UploadedDataAdapter extends RecyclerView.Adapter<UploadedDataAdapte
 
     @Override
     public void onBindViewHolder(UploadViewHolder holder, int position) {
-        EventDetailItem uploadedItemPojo=uploadedItemPojoList.get(position);
+        EventDetailItem uploadedItemPojo=(EventDetailItem)uploadedItemPojoList.get(position);
         holder.setData(uploadedItemPojo);
     }
 
@@ -75,9 +75,17 @@ public class UploadedDataAdapter extends RecyclerView.Adapter<UploadedDataAdapte
             this.uploadedItemPojo=item;
             this.date.setText(item.getDate().toUpperCase());
             this.count.setText(Integer.toString(item.getResources().size())+"  PHOTOS");
-            Glide.with(context).load(item.getResources().get(0))
-                    .placeholder(R.drawable.demo)
-                    .into(image);
+
+            if(item.getResources()!=null && item.getResources().size()>0){
+                image.setVisibility(View.VISIBLE);
+
+                Glide.with(context).load(item.getResources().get(0).getPath())
+                        .placeholder(R.drawable.demo)
+                        .into(image);
+            }else{
+                image.setVisibility(View.GONE);
+            }
+
             this.preview.setText(item.getDescription());
         }
 

@@ -2,6 +2,8 @@ package photoes.k15.photodata.pojo;
 
 import java.util.List;
 
+import cz.msebera.android.httpclient.client.cache.Resource;
+
 /**
  * Created by root on 6/2/17.
  */
@@ -10,7 +12,7 @@ public class EventDetailItem {
 
     private String latitude;
     private String longitude;
-    private List<String> resources;
+    private List<ResourceItem> resources;
     private String description;
     private String date;
 
@@ -38,11 +40,11 @@ public class EventDetailItem {
         this.longitude = longitude;
     }
 
-    public List<String> getResources() {
+    public List<ResourceItem> getResources() {
         return resources;
     }
 
-    public void setResources(List<String> resources) {
+    public void setResources(List<ResourceItem> resources) {
         this.resources = resources;
     }
 

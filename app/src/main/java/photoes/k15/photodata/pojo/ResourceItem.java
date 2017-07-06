@@ -7,7 +7,8 @@ package photoes.k15.photodata.pojo;
 public class ResourceItem {
 
     private int id;
-    private String url;
+    private String path;
+    private int event_id;
 
     public ResourceItem(){}
 
@@ -19,11 +20,19 @@ public class ResourceItem {
         this.id = id;
     }
 
-    public String getUrl() {
-        return url;
+    public String getPath() {
+        return path;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public int getEvent_id() {
+        return event_id;
+    }
+
+    public void setEvent_id(int event_id) {
+        this.event_id = event_id;
     }
 }

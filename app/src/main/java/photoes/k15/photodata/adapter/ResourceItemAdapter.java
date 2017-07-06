@@ -74,7 +74,7 @@ public class ResourceItemAdapter extends RecyclerView.Adapter<ResourceItemAdapte
 
         public void setData(ResourceItem item){
             this.item=item;
-            Glide.with(context).load(item.getUrl()).placeholder(R.drawable.login)
+            Glide.with(context).load(item.getPath()).placeholder(R.drawable.login)
             .into(resourceImage);
         }
 
@@ -83,9 +83,11 @@ public class ResourceItemAdapter extends RecyclerView.Adapter<ResourceItemAdapte
         public void onClick(View v) {
             if(v.getId()==R.id.imageView){
                 Intent intent=new Intent(context, PhotoViewActivity.class);
-                intent.putExtra(TransferableContent.TRANSFERIMAGEPATH,item.getUrl());
+                intent.putExtra(TransferableContent.TRANSFERIMAGEPATH,item.getPath());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
+            }else if(v.getId()==R.id.deleteIcon){
+                Toast.makeText(context,"you delete",Toast.LENGTH_LONG).show();
             }
         }
     }

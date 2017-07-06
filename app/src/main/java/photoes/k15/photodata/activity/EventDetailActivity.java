@@ -38,9 +38,8 @@ public class EventDetailActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        for(String resource:item.getResources()){
-            ResourceItem resource1=new ResourceItem();
-            resource1.setUrl(resource);
+        for(ResourceItem resource:item.getResources()){
+            ResourceItem resource1=resource;
             resourceItems.add(resource1);
         }
 
